@@ -1,0 +1,652 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>睿枢AI平台使用教程 · 新手入门指南</title>
+<style>
+:root{
+  --primary:#4f46e5;--primary-light:#eef2ff;--primary-dark:#3730a3;
+  --bg:#f8fafc;--card:#ffffff;--border:#e2e8f0;
+  --text:#1e293b;--text-2:#475569;--text-3:#94a3b8;
+  --code-bg:#0f172a;--code-text:#e2e8f0;
+  --success:#059669;--warn:#d97706;--danger:#dc2626;
+  --radius:12px;
+}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth;scroll-padding-top:80px}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;background:var(--bg);color:var(--text);line-height:1.75;font-size:15.5px}
+a{color:var(--primary);text-decoration:none}
+a:hover{text-decoration:underline}
+
+/* ===== 顶部导航 ===== */
+.topbar{position:fixed;top:0;left:0;right:0;height:56px;background:rgba(255,255,255,.92);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 24px;z-index:100;gap:12px}
+.topbar .logo{display:flex;align-items:center;gap:8px;font-weight:800;font-size:16px;color:var(--text)}
+.topbar .logo .dot{width:26px;height:26px;border-radius:8px;background:linear-gradient(135deg,#4f46e5,#9333ea);display:flex;align-items:center;justify-content:center;color:#fff;font-size:13px;font-weight:800}
+.topbar .badge{font-size:12px;color:var(--primary);background:var(--primary-light);padding:2px 10px;border-radius:999px;font-weight:600}
+.topbar .links{margin-left:auto;display:flex;gap:18px;font-size:13.5px}
+@media(max-width:760px){.topbar .links{display:none}}
+
+/* ===== 布局 ===== */
+.layout{display:flex;max-width:1280px;margin:0 auto;padding-top:72px;gap:28px}
+.sidebar{width:250px;flex-shrink:0;position:sticky;top:72px;align-self:flex-start;max-height:calc(100vh - 90px);overflow-y:auto;background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:18px 8px;font-size:13.5px}
+.sidebar h4{font-size:12px;color:var(--text-3);text-transform:uppercase;letter-spacing:.08em;padding:10px 14px 4px}
+.sidebar a{display:block;padding:6px 14px;border-radius:8px;color:var(--text-2);font-weight:500}
+.sidebar a:hover{background:var(--primary-light);color:var(--primary);text-decoration:none}
+.sidebar a.active{background:var(--primary-light);color:var(--primary);font-weight:700}
+.content{flex:1;min-width:0;padding-bottom:80px}
+
+/* ===== 组件 ===== */
+section.doc{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:32px 36px;margin-bottom:26px}
+@media(max-width:760px){section.doc{padding:22px 18px}}
+section.doc>h2{font-size:23px;font-weight:800;display:flex;align-items:center;gap:10px;margin-bottom:6px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+section.doc>h2 .num{flex-shrink:0;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#4f46e5,#9333ea);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center}
+h3{font-size:17.5px;font-weight:700;margin:26px 0 10px;color:var(--text)}
+h4{font-size:15px;font-weight:700;margin:18px 0 8px}
+p{margin:10px 0;color:var(--text-2)}
+p strong,li strong{color:var(--text)}
+ul,ol{padding-left:22px;margin:10px 0;color:var(--text-2)}
+li{margin:5px 0}
+code{font-family:"JetBrains Mono",Consolas,"Courier New",monospace;font-size:.88em;background:#f1f5f9;border:1px solid var(--border);padding:1px 6px;border-radius:6px;color:#be185d;word-break:break-all}
+
+/* 代码块 */
+.codeblock{position:relative;background:var(--code-bg);border-radius:10px;margin:14px 0;overflow:hidden}
+.codeblock .lang{position:absolute;top:0;right:0;background:#334155;color:#cbd5e1;font-size:11px;padding:3px 12px;border-radius:0 0 0 8px;font-weight:600;letter-spacing:.05em}
+.codeblock .copy{position:absolute;top:0;right:56px;background:#334155;color:#cbd5e1;font-size:11px;padding:3px 12px;border-radius:0 0 0 8px;border:none;cursor:pointer;font-weight:600}
+.codeblock .copy:hover{background:var(--primary);color:#fff}
+.codeblock pre{overflow-x:auto;padding:18px 16px;color:var(--code-text);font-family:"JetBrains Mono",Consolas,monospace;font-size:13px;line-height:1.7}
+.codeblock pre .c{color:#64748b}
+.codeblock pre .k{color:#93c5fd}
+.codeblock pre .s{color:#86efac}
+.codeblock pre .n{color:#fbbf24}
+
+/* 提示框 */
+.tip,.warnbox,.dangerbox{display:flex;gap:12px;padding:14px 16px;border-radius:10px;margin:16px 0;font-size:14px;line-height:1.7}
+.tip{background:#ecfdf5;border:1px solid #a7f3d0;color:#065f46}
+.warnbox{background:#fffbeb;border:1px solid #fde68a;color:#92400e}
+.dangerbox{background:#fef2f2;border:1px solid #fecaca;color:#991b1b}
+.tip .icon,.warnbox .icon,.dangerbox .icon{flex-shrink:0;font-size:17px;line-height:1.5}
+
+/* 表格 */
+table{width:100%;border-collapse:collapse;margin:16px 0;font-size:13.8px;background:var(--card)}
+th{background:#f1f5f9;text-align:left;padding:10px 14px;font-weight:700;color:var(--text);border-bottom:2px solid var(--border);white-space:nowrap}
+td{padding:10px 14px;border-bottom:1px solid var(--border);color:var(--text-2);vertical-align:top}
+tr:hover td{background:#fafbfe}
+.table-wrap{overflow-x:auto}
+
+/* 步骤卡片 */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:14px;margin:18px 0}
+.step{background:linear-gradient(180deg,#fafaff,#fff);border:1px solid var(--border);border-radius:var(--radius);padding:18px;position:relative}
+.step .s-num{position:absolute;top:-12px;left:16px;background:var(--primary);color:#fff;width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:800;font-size:13px;box-shadow:0 3px 8px rgba(79,70,229,.35)}
+.step h4{margin:6px 0 4px;font-size:15px}
+.step p{font-size:13px;margin:4px 0}
+
+/* 流程图 */
+.flow{display:flex;align-items:center;justify-content:flex-start;flex-wrap:wrap;gap:8px;margin:18px 0;padding:18px;background:var(--primary-light);border-radius:var(--radius);border:1px dashed #c7d2fe}
+.flow .node{background:#fff;border:1px solid #c7d2fe;border-radius:10px;padding:8px 16px;font-size:13.5px;font-weight:600;color:var(--primary-dark);box-shadow:0 2px 5px rgba(79,70,229,.08)}
+.flow .arrow{color:var(--primary);font-weight:800;font-size:16px}
+
+/* 键值信息表 */
+.kv{display:grid;grid-template-columns:150px 1fr;border:1px solid var(--border);border-radius:10px;overflow:hidden;margin:14px 0;font-size:14px}
+.kv>div{padding:10px 16px;border-bottom:1px solid var(--border)}
+.kv>div:nth-last-child(-n+2){border-bottom:none}
+.kv .k{background:#f8fafc;font-weight:700;color:var(--text)}
+.kv .v{color:var(--text-2)}
+@media(max-width:600px){.kv{grid-template-columns:110px 1fr}}
+
+/* Hero */
+.hero{background:linear-gradient(135deg,#312e81 0%,#4f46e5 55%,#7c3aed 100%);border-radius:16px;color:#fff;padding:44px 40px;margin-bottom:26px;position:relative;overflow:hidden}
+.hero::after{content:"";position:absolute;right:-80px;top:-80px;width:300px;height:300px;border-radius:50%;background:rgba(255,255,255,.08)}
+.hero::before{content:"";position:absolute;right:40px;bottom:-120px;width:220px;height:220px;border-radius:50%;background:rgba(255,255,255,.06)}
+.hero h1{font-size:31px;font-weight:900;margin-bottom:12px;position:relative;z-index:1}
+.hero p{color:#e0e7ff;font-size:15.5px;max-width:640px;position:relative;z-index:1}
+.hero .meta{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px;position:relative;z-index:1}
+.hero .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:4px 14px;border-radius:999px;font-size:12.5px;font-weight:600}
+@media(max-width:760px){.hero{padding:30px 22px}.hero h1{font-size:24px}}
+
+/* 视频教程 */
+.video-section{background:linear-gradient(180deg,#1e1b4b 0%,#312e81 50%,#4f46e5 100%);border-radius:16px;color:#fff;padding:32px 36px;margin-bottom:26px;position:relative;overflow:hidden}
+.video-section::before{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
+.video-section::after{content:"";position:absolute;left:-80px;bottom:-80px;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.04);pointer-events:none}
+.video-section h2{font-size:24px;font-weight:900;margin-bottom:6px;display:flex;align-items:center;gap:10px;position:relative;z-index:1}
+.video-section h2 .num{flex-shrink:0;width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#fbbf24,#f59e0b);color:#fff;font-size:15px;display:flex;align-items:center;justify-content:center}
+.video-section .desc{color:#c7d2fe;font-size:14.5px;margin:6px 0 18px;max-width:760px;position:relative;z-index:1}
+.video-section .meta{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:18px;position:relative;z-index:1}
+.video-section .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:3px 12px;border-radius:999px;font-size:12px;font-weight:600}
+.video-wrap{position:relative;background:rgba(0,0,0,.35);border-radius:12px;overflow:hidden;box-shadow:0 12px 32px rgba(0,0,0,.45);border:1px solid rgba(255,255,255,.15);position:relative;z-index:1}
+.video-wrap video{display:block;width:100%;height:auto;background:#000;outline:none}
+.video-wrap video::-webkit-media-controls-panel{background:rgba(0,0,0,.6)}
+.video-fallback{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:30px;text-align:center;color:#cbd5e1;font-size:14px;background:rgba(0,0,0,.4)}
+.video-fallback a{margin-top:10px;color:#fbbf24;font-weight:700}
+.video-chapters{margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:8px;position:relative;z-index:1}
+.video-chapters .ch{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:8px;padding:8px 12px;font-size:13px;color:#e0e7ff;display:flex;align-items:center;gap:8px}
+.video-chapters .ch::before{content:"▶";color:#fbbf24;font-size:10px;flex-shrink:0}
+@media(max-width:760px){.video-section{padding:24px 18px}.video-section h2{font-size:20px}}
+
+.badge-new{display:inline-block;font-size:11px;background:#fee2e2;color:#b91c1c;padding:1px 8px;border-radius:999px;font-weight:700;margin-left:6px;vertical-align:middle}
+.badge-free{display:inline-block;font-size:11px;background:#dcfce7;color:#15803d;padding:1px 8px;border-radius:999px;font-weight:700;margin-left:6px;vertical-align:middle}
+
+/* FAQ 折叠 */
+details{border:1px solid var(--border);border-radius:10px;margin:10px 0;background:var(--card);overflow:hidden}
+details summary{cursor:pointer;padding:13px 18px;font-weight:700;font-size:14.5px;list-style:none;display:flex;align-items:center;gap:10px;color:var(--text)}
+details summary::before{content:"Q";flex-shrink:0;width:22px;height:22px;border-radius:6px;background:var(--primary-light);color:var(--primary);font-size:12px;display:flex;align-items:center;justify-content:center;font-weight:800}
+details[open] summary{border-bottom:1px solid var(--border);background:#fafbff}
+details .answer{padding:12px 18px;color:var(--text-2);font-size:14px}
+details .answer p{margin:6px 0}
+
+.footer{text-align:center;color:var(--text-3);font-size:12.5px;padding:30px 0 40px}
+
+/* 移动端目录 */
+@media(max-width:900px){.sidebar{display:none}}
+</style>
+</head>
+<body>
+
+<nav class="topbar">
+  <div class="logo"><span class="dot">R</span>睿枢AI · 使用教程</div>
+  <span class="badge">新手入门</span>
+  <div class="links">
+    <a href="#sec-intro">平台简介</a>
+    <a href="#sec-quick">快速上手</a>
+    <a href="#sec-api">API 调用</a>
+    <a href="#sec-tools">工具接入</a>
+    <a href="#sec-faq">常见问题</a>
+    <a href="#sec-video">🎬 视频教程</a>
+  </div>
+</nav>
+
+<div class="layout">
+<aside class="sidebar">
+  <h4>入门</h4>
+  <a href="#sec-intro">1. 平台是什么</a>
+  <a href="#sec-register">2. 注册与登录</a>
+  <a href="#sec-console">3. 认识控制台</a>
+  <a href="#sec-quick">4. 快速上手三步走</a>
+  <h4>核心操作</h4>
+  <a href="#sec-playground">5. 在线体验（免代码）</a>
+  <a href="#sec-api">6. API 调用详解</a>
+  <a href="#sec-advanced">7. 进阶：流式与多轮</a>
+  <a href="#sec-tools">8. 接入常用工具</a>
+  <h4>参考</h4>
+  <a href="#sec-billing">9. 计费与额度</a>
+  <a href="#sec-security">10. 安全须知</a>
+  <a href="#sec-faq">11. 常见问题 FAQ</a>
+  <h4>视频</h4>
+  <a href="#sec-video">🎬 视频教程（9分钟）</a>
+</aside>
+
+<main class="content">
+
+<!-- ============ HERO ============ -->
+<div class="hero">
+  <h1>睿枢AI平台使用教程</h1>
+  <p>睿枢AI（coral-gpu.com）是一个企业级 AI 基础设施平台，提供大模型 API 聚合服务与 GPU 算力租赁。一份文档在手，从零开始：注册账号 → 获取密钥 → 充值额度 → 调用你的第一个 AI 模型，全程只需 10 分钟。</p>
+  <div class="meta">
+    <span>🌐 官网：www.coral-gpu.com</span>
+    <span>🔌 OpenAI 兼容接口</span>
+    <span>📚 30+ 模型</span>
+    <span>🖥️ GPU 云实例 / 裸金属</span>
+  </div>
+</div>
+
+<!-- ============ 1 平台简介 ============ -->
+<section class="doc" id="sec-intro">
+  <h2><span class="num">1</span>平台是什么</h2>
+  <p><strong>睿枢AI</strong>（coral-gpu.com）是一个<strong>企业级 AI 基础设施平台</strong>，核心业务有两大块：</p>
+
+  <h3>① 大模型 API 聚合服务</h3>
+  <p>把 DeepSeek、Qwen（通义千问）、Kimi、GLM（智谱）、MiniMax、 等国内主流大模型，以及生图、语音、嵌入、重排序模型，统一聚合到一个平台，通过<strong>一套统一的 OpenAI 兼容接口</strong>对外提供服务：</p>
+  <ul>
+    <li><strong>一站式调用所有大模型</strong>：不用分别注册十几个厂商账号，一个 API Key 调用全部模型</li>
+    <li><strong>业务代码零修改迁移</strong>：接口完全兼容 OpenAI 格式，已有项目只需替换 <code>base_url</code> 和 <code>api_key</code> 两个参数</li>
+    <li><strong>按量付费，价格优惠</strong>：按实际消耗的 Token 计费,部分模型相比官网价格有明显折扣</li>
+    <li><strong>支持 Agent 开发工具</strong>：可直接接入 Claude Code、Codex、OpenCode 等编程助手</li>
+  </ul>
+
+  <h3>② GPU 算力租赁</h3>
+  <p>提供 RTX 4090、A800、H20、昇腾 910B 等 GPU <strong>云实例</strong>、<strong>裸金属</strong>与<strong>AI 工作站</strong>，覆盖开发推理、模型微调（LoRA / SFT / DPO / RLHF）、私有化部署全场景：</p>
+  <ul>
+    <li>按小时 / 包月 / 裸金属三种交付方式，秒级计费弹性扩缩</li>
+    <li>预装 PyTorch、TensorFlow、vLLM 等环境镜像，开机即用</li>
+    <li>99.9% 平台可用性 SLA、数据三重备份 · 异地容灾</li>
+  </ul>
+
+  <div class="tip"><span class="icon">💡</span><div><strong>什么是 OpenAI 兼容接口？</strong><br>OpenAI 的接口格式是行业事实标准。只要一个平台"兼容 OpenAI"，就意味着你可以用 OpenAI 官方的 SDK、以及市面上几乎所有支持"自定义 API 地址"的软件（如 Cherry Studio、LobeChat、沉浸式翻译等）来调用它——这就是聚合平台最大的价值。</div></div>
+
+  <h3>平台核心入口</h3>
+  <div class="table-wrap"><table>
+    <tr><th>入口</th><th>网址</th><th>用途</th></tr>
+    <tr><td><strong>官网首页</strong></td><td><code>https://www.coral-gpu.com/</code></td><td>平台介绍、模型广场、GPU 租赁、在线体验</td></tr>
+    <tr><td><strong>控制台</strong></td><td><code>https://www.coral-gpu.com/app.html</code></td><td>API 密钥管理、钱包充值、使用日志、数据看板</td></tr>
+    <tr><td><strong>文档中心</strong></td><td><code>https://www.coral-gpu.com/docs.html</code></td><td>官方开发文档（首次调用 API、Agent 接入等）</td></tr>
+    <tr><td><strong>模型价格中心</strong></td><td><code>https://www.coral-gpu.com/pricing.html</code></td><td>全部模型的费率一览</td></tr>
+    <tr><td><strong>API 服务地址</strong></td><td><code>https://www.coral-gpu.com:3000/v1</code></td><td>程序调用专用，浏览器直接打开会提示 forbidden，属正常现象</td></tr>
+  </table></div>
+
+  <div class="warnbox"><span class="icon">⚠️</span><div>注意区分两个地址：<strong>网站</strong>（<code>https://www.coral-gpu.com</code>，用浏览器访问）和 <strong>API 地址</strong>（<code>https://www.coral-gpu.com:3000/v1</code>，只在程序里填写）。用浏览器打开 API 地址会提示 forbidden，这不是故障。</div></div>
+</section>
+
+<!-- ============ 2 注册登录 ============ -->
+<section class="doc" id="sec-register">
+  <h2><span class="num">2</span>注册与登录</h2>
+
+  <div class="flow">
+    <span class="node">打开官网</span><span class="arrow">→</span>
+    <span class="node">点击「登录」</span><span class="arrow">→</span>
+    <span class="node">手机号 + 验证码注册</span><span class="arrow">→</span>
+    <span class="node">进入控制台</span>
+  </div>
+
+  <h3>2.1 注册账号</h3>
+  <ol>
+    <li>浏览器打开官网 <code>https://www.coral-gpu.com/</code></li>
+    <li>点击右上角<strong>「登录」</strong>按钮，弹出登录/注册对话框</li>
+    <li>切换到<strong>「注册」</strong>标签，填写：
+      <ul>
+        <li><strong>手机号</strong>：输入你的手机号</li>
+        <li><strong>验证码</strong>：点击「发送验证码」，把短信收到的验证码填入</li>
+        <li><strong>密码</strong>：设置密码（至少 8 位）</li>
+      </ul>
+    </li>
+    <li>勾选同意《服务条款》和《隐私政策》，点击<strong>注册</strong></li>
+  </ol>
+
+  <h3>2.2 登录</h3>
+  <p>已注册用户直接在登录框输入<strong>手机号 + 密码</strong>登录；忘记密码可点击「忘记密码？」，通过手机验证码重置。勾选「保持登录」后一段时间内无需重复登录。</p>
+
+  <div class="tip"><span class="icon">💡</span><div>登录成功后会自动进入<strong>控制台概览页</strong>。如果看到「先完成账号登录，个人账户、钱包和 API 密钥才会生效」的提示，说明还没登录，先登录再操作。</div></div>
+</section>
+
+<!-- ============ 3 控制台 ============ -->
+<section class="doc" id="sec-console">
+  <h2><span class="num">3</span>认识控制台</h2>
+  <p>控制台（<code>app.html</code>）是你日常操作的主界面，概览页一屏即可掌握账户全局状态：</p>
+
+  <h3>3.1 「常规」分组 —— 日常最常用</h3>
+  <div class="table-wrap"><table>
+    <tr><th>页面</th><th>功能说明</th></tr>
+    <tr><td><strong>概览</strong></td><td>账户与服务状态总览：余额、近 24 小时消耗、请求次数、API 服务地址、平台公告，以及"快速开始"三步引导</td></tr>
+    <tr><td><strong>数据看板</strong></td><td>更详细的账户数据可视化：消耗趋势、请求量统计</td></tr>
+    <tr><td><strong>API 密钥</strong></td><td>创建、查看、复制、删除 API Key —— <strong>调用接口的凭证</strong></td></tr>
+    <tr><td><strong>使用日志</strong></td><td>每一次请求的记录：时间、模型、Token 消耗、计费明细，排错对账必备</td></tr>
+  </table></div>
+  <h3>3.2 「资源」分组</h3>
+  <div class="table-wrap"><table>
+    <tr><th>页面</th><th>功能说明</th></tr>
+    <tr><td><strong>聚合平台</strong></td><td>聚合的模型服务总览</td></tr>
+    <tr><td><strong>模型广场</strong></td><td>浏览所有可用模型：分类筛选（对话/生图/语音/嵌入/重排序）、价格、上下文长度、发布时间</td></tr>
+    <tr><td><strong>模型价格</strong></td><td>全部模型的费率表，调用前核对价格</td></tr>
+  </table></div>
+
+  <h3>3.3 「个人」分组</h3>
+  <div class="table-wrap"><table>
+    <tr><th>页面</th><th>功能说明</th></tr>
+    <tr><td><strong>钱包</strong></td><td>查看余额、充值、查看充值记录</td></tr>
+    <tr><td><strong>邀请奖励</strong></td><td>获取你的专属邀请链接，好友注册并充值后可获得奖励</td></tr>
+    <tr><td><strong>个人资料</strong></td><td>修改昵称、绑定/修改邮箱、修改密码</td></tr>
+    <tr><td><strong>在线客服</strong></td><td>遇到问题直接咨询平台客服</td></tr>
+  </table></div>
+
+  <div class="tip"><span class="icon">💡</span><div><strong>API 密钥管理建议：</strong>为不同环境创建不同的 Key（如生产环境、测试环境、CI/CD 部署、数据分析），使用时调用不同的key</div></div>
+</section>
+
+<!-- ============ 4 快速上手 ============ -->
+<section class="doc" id="sec-quick">
+  <h2><span class="num">4</span>快速上手三步走</h2>
+  <p>这是控制台概览页官方引导的三个步骤，也是使用本平台<strong>最核心的流程</strong>：</p>
+
+  <div class="steps">
+    <div class="step"><span class="s-num">1</span><h4>创建 API 密钥</h4><p>在「API 密钥」页面新建一把密钥，它是调用接口的身份凭证</p></div>
+    <div class="step"><span class="s-num">2</span><h4>充值额度</h4><p>在「钱包」页面充值，余额不足接口会返回错误</p></div>
+    <div class="step"><span class="s-num">3</span><h4>发送首个请求</h4><p>用 OpenAI 兼容接口发起第一次对话，跑通全流程</p></div>
+  </div>
+
+  <h3>第一步：创建 API 密钥（API Key）</h3>
+  <ol>
+    <li>登录后进入控制台，点击左侧导航<strong>「API 密钥」</strong></li>
+    <li>点击<strong>「新建 API 密钥」</strong>按钮（新用户会有一个默认key）</li>
+    <li>创建成功后，<strong>立即复制并妥善保存</strong>密钥（形如 <code>sk-xxxxxxxx</code>）</li>
+  </ol>
+  <div class="dangerbox"><span class="icon">🚨</span><div><strong>密钥安全须知：</strong>API Key 等同于你账户的支付凭证，谁拿到密钥谁就能消耗你的余额。<strong>不要</strong>把完整密钥写进前端页面、公开仓库、截图或日志中。如果怀疑泄露，立即到「API 密钥」页删除旧密钥并新建。</div></div>
+
+  <h3>第二步：充值额度</h3>
+  <ol>
+    <li>点击左侧导航<strong>「钱包」</strong>，查看当前余额</li>
+    <li>点击充值，选择金额，完成付款</li>
+    <li>充值到账后即可开始调用。后续可在「概览」页随时查看剩余额度</li>
+  </ol>
+  <div class="warnbox"><span class="icon">⚠️</span><div>余额不足时接口会返回 <code>insufficient_user_quota</code> 错误。新手建议先小额充值测试，确认调用正常后再按需补充。</div></div>
+
+  <h3>第三步：发送首个请求</h3>
+  <p>最简单的方式是用 <strong>curl</strong>（Windows 10+ / macOS / Linux 均自带）。打开终端，粘贴以下命令并替换密钥：</p>
+
+  <div class="codeblock"><span class="lang">bash</span><button class="copy" onclick="copyCode(this)">复制</button><pre>curl -X POST "https://www.coral-gpu.com:3000/v1/chat/completions" \
+  -H "Authorization: Bearer <span class="s">sk-替换为你的API密钥</span>" \
+  -H "Content-Type: application/json" \
+  -d '{
+    <span class="k">"model"</span>: <span class="s">"deepseek-v4-pro"</span>,
+    <span class="k">"messages"</span>: [
+      { <span class="k">"role"</span>: <span class="s">"user"</span>, <span class="k">"content"</span>: <span class="s">"你好，请用一句话介绍睿枢AI"</span> }
+    ],
+    <span class="k">"stream"</span>: false
+  }'</pre></div>
+
+  <p>如果返回了类似下面的 JSON（包含 <code>choices</code> 和模型回复内容），恭喜你——调用成功！🎉</p>
+
+  <div class="codeblock"><span class="lang">json</span><button class="copy" onclick="copyCode(this)">复制</button><pre>{
+  <span class="k">"choices"</span>: [
+    {
+      <span class="k">"message"</span>: {
+        <span class="k">"role"</span>: <span class="s">"assistant"</span>,
+        <span class="k">"content"</span>: <span class="s">"你好！睿枢AI是一个企业级AI基础设施平台……"</span>
+      },
+      <span class="k">"finish_reason"</span>: <span class="s">"stop"</span>
+    }
+  ],
+  <span class="k">"usage"</span>: {
+    <span class="k">"prompt_tokens"</span>: <span class="n">12</span>,
+    <span class="k">"completion_tokens"</span>: <span class="n">45</span>,
+    <span class="k">"total_tokens"</span>: <span class="n">57</span>
+  }
+}</pre></div>
+
+  <div class="tip"><span class="icon">💡</span><div>首次调用建议选择<strong>便宜</strong>的模型练手，例如 <code>DeepSeek-V4-Flash</code>（低价）。模型 ID 一定要用<strong>模型广场里展示的完整 ID</strong>，不能只写展示名。</div></div>
+</section>
+
+<!-- ============ 5 在线体验 ============ -->
+<section class="doc" id="sec-playground">
+  <h2><span class="num">5</span>在线体验（免代码）</h2>
+  <p>不想写代码也能玩转大模型。官网首页提供了<strong>在线对话体验</strong>功能：</p>
+  <ol>
+    <li>点击首页右上角的<strong>登录控制台</strong>，登录后点击左侧的<strong>聚合平台</strong>即可选择相应模型进行在线体验</li>
+    <li>在输入框输入问题，模型即时回复，无需 API Key</li>
+    <li>在首页的<strong>「模型广场」</strong>点击任意模型，也可以进入对应模型的在线体验</li>
+  </ol>
+  <p>建议新手先在这里多试几个模型，比较回复质量和速度，再决定程序中调用哪个。</p>
+</section>
+
+<!-- ============ 6 API 详解 ============ -->
+<section class="doc" id="sec-api">
+  <h2><span class="num">6</span>API 调用详解</h2>
+
+  <h3>6.1 核心配置信息</h3>
+  <div class="kv">
+    <div class="k">协议</div><div class="v">OpenAI Compatible（OpenAI 兼容）</div>
+    <div class="k">Base URL</div><div class="v"><code>https://www.coral-gpu.com:3000/v1</code></div>
+    <div class="k">鉴权方式</div><div class="v">请求头 <code>Authorization: Bearer 你的API密钥</code></div>
+    <div class="k">Content-Type</div><div class="v"><code>application/json</code></div>
+    <div class="k">模型 ID</div><div class="v">以控制台「模型广场」展示的完整 ID 为准</div>
+  </div>
+
+  <h3>6.2 先测试连通性：查看可用模型</h3>
+  <p>调用模型列表接口，验证 API Key、Base URL 和网络是否都正常：</p>
+  <div class="codeblock"><span class="lang">bash</span><button class="copy" onclick="copyCode(this)">复制</button><pre>curl "https://www.coral-gpu.com:3000/v1/models" \
+  -H "Authorization: Bearer <span class="s">sk-替换为你的API密钥</span>"</pre></div>
+  <p>返回 JSON 里会列出当前可调用的所有模型 ID —— 这些 ID 就是可以填进 <code>"model"</code> 字段的值。</p>
+
+  <h3>6.3 Python 调用（推荐）</h3>
+  <p>平台兼容 OpenAI 官方 SDK。先安装 SDK（需要 Python 3.7.1+）：</p>
+  <div class="codeblock"><span class="lang">bash</span><button class="copy" onclick="copyCode(this)">复制</button><pre>pip install --upgrade openai</pre></div>
+
+  <p>然后把 OpenAI 示例中的 <code>base_url</code> 和 <code>api_key</code> 换成本平台的即可，<strong>其余代码零修改</strong>：</p>
+  <div class="codeblock"><span class="lang">python</span><button class="copy" onclick="copyCode(this)">复制</button><pre><span class="k">from</span> openai <span class="k">import</span> OpenAI
+
+client = OpenAI(
+    api_key=<span class="s">"sk-替换为你的API密钥"</span>,
+    base_url=<span class="s">"https://www.coral-gpu.com:3000/v1"</span>,
+)
+
+response = client.chat.completions.create(
+    model=<span class="s">"deepseek-v4-pro"</span>,
+    messages=[
+        {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"你是一位耐心的中文助手"</span>},
+        {<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"用三点说明什么是API"</span>},
+    ],
+)
+
+<span class="k">print</span>(response.choices[<span class="n">0</span>].message.content)
+<span class="k">print</span>(response.usage)  <span class="c"># 本次请求消耗的 Token 数</span></pre></div>
+
+  <h3>6.4 Node.js 调用</h3>
+  <div class="codeblock"><span class="lang">javascript</span><button class="copy" onclick="copyCode(this)">复制</button><pre><span class="k">import</span> OpenAI <span class="k">from</span> <span class="s">"openai"</span>;
+
+<span class="k">const</span> client = <span class="k">new</span> OpenAI({
+  baseURL: <span class="s">"https://www.coral-gpu.com:3000/v1"</span>,
+  apiKey: process.env.CORAL_API_KEY,  <span class="c">// 建议用环境变量存密钥</span>
+});
+
+<span class="k">const</span> resp = <span class="k">await</span> client.chat.completions.create({
+  model: <span class="s">"deepseek-v4-pro"</span>,
+  messages: [{ role: <span class="s">"user"</span>, content: <span class="s">"你好"</span> }],
+});
+
+console.log(resp.choices[<span class="n">0</span>].message.content);</pre></div>
+
+  <h3>6.5 主要接口一览</h3>
+  <div class="table-wrap"><table>
+    <tr><th>接口</th><th>路径</th><th>用途</th></tr>
+    <tr><td>模型列表</td><td><code>GET /v1/models</code></td><td>查看所有可调用模型</td></tr>
+    <tr><td>对话补全</td><td><code>POST /v1/chat/completions</code></td><td>文本对话（最常用）</td></tr>
+    <tr><td>Anthropic 协议</td><td><code>POST /v1/messages</code></td><td>兼容 Anthropic 格式，接入 Claude Code 等工具时使用</td></tr>
+    <tr><td>图像生成</td><td><code>POST /v1/images/generations</code></td><td>文生图（如 Qwen-Image、Kolors）</td></tr>
+    <tr><td>视频生成</td><td>异步任务接口（见文档中心）</td><td>Seedance 2.0、可灵、MiniMax-H3 等，创建任务后轮询结果</td></tr>
+  </table></div>
+  <p>视频生成类模型（Seedance 2.0、MiniMax-H3 等）采用<strong>异步任务</strong>模式：创建任务 → 拿到任务 ID → 轮询状态 → 下载成品，具体接口和 Python Demo 见平台<strong>文档中心</strong>对应章节。</p>
+</section>
+
+<!-- ============ 7 进阶 ============ -->
+<section class="doc" id="sec-advanced">
+  <h2><span class="num">7</span>进阶：流式输出与多轮对话</h2>
+
+  <h3>7.1 流式输出（Streaming）</h3>
+  <p>把 <code>stream</code> 设为 <code>true</code>，模型会边生成边返回，大幅降低"首字等待时间"，适合聊天应用：</p>
+  <div class="codeblock"><span class="lang">python</span><button class="copy" onclick="copyCode(this)">复制</button><pre>stream = client.chat.completions.create(
+    model=<span class="s">"deepseek-v4-pro"</span>,
+    messages=[{<span class="s">"role"</span>: <span class="s">"user"</span>, <span class="s">"content"</span>: <span class="s">"写一首关于秋天的短诗"</span>}],
+    stream=<span class="k">True</span>,
+)
+
+<span class="k">for</span> chunk <span class="k">in</span> stream:
+    <span class="k">if</span> chunk.choices <span class="k">and</span> chunk.choices[<span class="n">0</span>].delta.content:
+        <span class="k">print</span>(chunk.choices[<span class="n">0</span>].delta.content, end=<span class="s">""</span>, flush=<span class="k">True</span>)</pre></div>
+
+  <h3>7.2 多轮对话</h3>
+  <p>API 本身"没有记忆"，多轮对话需要把历史消息一起发送——每轮都把之前的问答追加进 <code>messages</code> 数组：</p>
+  <div class="codeblock"><span class="lang">python</span><button class="copy" onclick="copyCode(this)">复制</button><pre>messages = [
+    {<span class="s">"role"</span>: <span class="s">"system"</span>, <span class="s">"content"</span>: <span class="s">"你是一位资深架构师"</span>},
+    {<span class="s">"role"</span>: <span class="s">"user"</span>,   <span class="s">"content"</span>: <span class="s">"如何为AI聚合平台设计限流？"</span>},
+    {<span class="s">"role"</span>: <span class="s">"assistant"</span>, <span class="s">"content"</span>: <span class="s">"可以从令牌桶算法入手……"</span>},  <span class="c"># 历史回复</span>
+    {<span class="s">"role"</span>: <span class="s">"user"</span>,   <span class="s">"content"</span>: <span class="s">"展开讲讲令牌桶的实现"</span>},              <span class="c"># 新问题</span>
+]
+response = client.chat.completions.create(
+    model=<span class="s">"deepseek-v4-pro"</span>, messages=messages
+)</pre></div>
+
+  <h3>7.3 常用参数速查</h3>
+  <div class="table-wrap"><table>
+    <tr><th>参数</th><th>作用</th><th>建议值</th></tr>
+    <tr><td><code>temperature</code></td><td>控制随机性：越低越确定，越高越发散</td><td>问答/代码 0~0.3；写作 0.6~0.9（官方对话默认 0.6）</td></tr>
+    <tr><td><code>max_tokens</code></td><td>限制单次回复的最大长度</td><td>按需设置，可控制成本</td></tr>
+    <tr><td><code>stream</code></td><td>是否流式返回</td><td>聊天界面建议 true</td></tr>
+    <tr><td><code>messages</code></td><td>对话消息数组，含 system / user / assistant 角色</td><td>system 放角色设定，user 放问题</td></tr>
+  </table></div>
+</section>
+
+<!-- ============ 8 工具接入 ============ -->
+<section class="doc" id="sec-tools">
+  <h2><span class="num">8</span>接入常用工具（零代码开发）</h2>
+  <p>凡是支持"自定义 OpenAI 接口"的第三方软件，都可以接入本平台。通用配方只有三样东西：</p>
+  <div class="kv">
+    <div class="k">API 地址</div><div class="v"><code>https://www.coral-gpu.com:3000/v1</code></div>
+    <div class="k">API Key</div><div class="v">控制台「API 密钥」页面创建的密钥</div>
+    <div class="k">模型名称</div><div class="v">模型广场中的完整模型 ID（如 <code>DeepSeek-V4-Pro</code>）</div>
+  </div>
+
+  <h3>8.1 通用聊天客户端（Cherry Studio / LobeChat / NextChat 等）</h3>
+  <ol>
+    <li>在软件的「模型服务商 / 模型设置」中新建一个 <strong>OpenAI 兼容</strong>服务商</li>
+    <li>API 地址填 <code>https://www.coral-gpu.com:3000/v1</code>（注意末尾带 <code>/v1</code>）</li>
+    <li>API Key 填你的密钥</li>
+    <li>手动添加模型（填完整模型 ID）或点击「获取模型列表」自动拉取</li>
+  </ol>
+
+  <h3>8.2 编程助手 / Agent 工具</h3>
+  <div class="table-wrap"><table>
+    <tr><th>工具</th><th>接入方式</th></tr>
+    <tr><td><strong>Claude Code</strong></td><td>设置环境变量 <code>ANTHROPIC_BASE_URL</code> 指向本平台地址，替换 API Key</td></tr>
+    <tr><td><strong>Codex</strong></td><td>自定义模型服务商：在配置文件中把服务商指向本平台</td></tr>
+    <tr><td><strong>OpenCode</strong></td><td>OpenAI Compatible 接入：配置 provider 的 baseURL 与密钥</td></tr>
+    <tr><td><strong>WorkBuddy / CodeBuddy</strong></td><td>代码助手接入：在模型服务配置中选择自定义 OpenAI 兼容服务商</td></tr>
+  </table></div>
+  <p>具体每一步的配置细节，以平台<strong>文档中心</strong>（<code>docs.html</code>）对应章节为准。</p>
+</section>
+
+<!-- ============ 9 计费 ============ -->
+<section class="doc" id="sec-billing">
+  <h2><span class="num">9</span>计费与额度说明</h2>
+
+  <h3>9.1 什么是 Token？</h3>
+  <p>Token 是大模型处理文本的最小单位——对中文而言，<strong>1 个汉字 ≈ 0.5~1 个 Token</strong>，1 个英文单词 ≈ 1~2 个 Token。计费公式：</p>
+  <div class="codeblock"><span class="lang">text</span><pre>消耗金额 = 输入Token数 × 输入单价 + 输出Token数 × 输出单价
+（部分模型另有缓存命中价，缓存命中部分通常大幅优惠）</pre></div>
+
+  <h3>9.2 账单哪里看？</h3>
+  <ul>
+    <li><strong>单次请求消耗</strong>：API 响应中的 <code>usage</code> 字段（prompt_tokens / completion_tokens）</li>
+    <li><strong>历史明细</strong>：控制台 → 「使用日志」，可逐条核对每次请求的模型、状态、延迟和费用</li>
+    <li><strong>余额与趋势</strong>：控制台 → 「概览」（本月消费、累计 Tokens、请求次数、成功率）/「数据看板」/「钱包」</li>
+  </ul>
+
+  <h3>9.3 省钱技巧</h3>
+  <ul>
+    <li>能用 Flash / 小尺寸模型解决的，不用旗舰模型（价差可达数十倍）</li>
+    <li>合理设置 <code>max_tokens</code>，避免意外超长输出</li>
+    <li>重复的长提示词（如系统提示、文档背景）利用<strong>提示缓存</strong>，缓存命中部分按优惠价计费</li>
+    <li>多轮对话别无限累积历史消息，适时裁剪，输入 Token 同样计费</li>
+    <li>先用免费模型（如 <code>Qwen/Qwen3.5-4B</code>）完成开发和调试，上线再切换付费模型</li>
+  </ul>
+</section>
+
+<!-- ============ 10 安全 ============ -->
+<section class="doc" id="sec-security">
+  <h2><span class="num">10</span>安全须知</h2>
+  <ul>
+    <li><strong>密钥即钱包</strong>：API Key 可直接消耗账户余额，绝不外泄、不发群、不进代码仓库</li>
+    <li><strong>用环境变量存密钥</strong>：程序中通过 <code>os.environ</code> / <code>process.env</code> 读取，不要硬编码</li>
+    <li><strong>按需选择</strong>：在「API 密钥」页为不同环境单独建 Key，按需选择不同 Key</li>
+    <li><strong>定期轮换</strong>：删除不用的旧密钥，疑似泄露立即作废重建</li>
+    <li><strong>敏感数据</strong>：业务数据含个人隐私或商业机密时，先了解平台数据策略再上量（平台提供数据三重备份 · 异地容灾）</li>
+    <li><strong>谨防钓鱼</strong>：认准官方域名 <code>www.coral-gpu.com</code>，客服只通过控制台「在线客服」入口联系</li>
+  </ul>
+</section>
+
+<!-- ============ 11 FAQ ============ -->
+<section class="doc" id="sec-faq">
+  <h2><span class="num">11</span>常见问题 FAQ</h2>
+
+  <h3>调用报错（来自官方文档「常见错误」表）</h3>
+  <details>
+    <summary>返回 401 或 API Key 无效</summary>
+    <div class="answer"><p>检查 Header 是否为 <code>Authorization: Bearer sk-...</code>，不要漏掉 <strong>Bearer</strong>。同时确认密钥未在控制台被删除或重置。</p></div>
+  </details>
+  <details>
+    <summary>返回 404</summary>
+    <div class="answer"><p>确认 Base URL 末尾是 <code>/v1</code>，即 <code>https://www.coral-gpu.com:3000/v1</code>，接口路径是 <code>/chat/completions</code>。少了或多了斜杠都会 404。</p></div>
+  </details>
+  <details>
+    <summary>返回 400 模型不存在</summary>
+    <div class="answer"><p>使用模型广场里展示的<strong>完整模型 ID</strong>，不要只写展示名。可先调 <code>GET /v1/models</code> 核对可用 ID。</p></div>
+  </details>
+  <details>
+    <summary>返回 insufficient_user_quota（余额不足）</summary>
+    <div class="answer"><p>账户余额不够了。充值后重试，或选择价格更低、输出更短的模型（如免费的 <code>Qwen/Qwen3.5-4B</code>）。</p></div>
+  </details>
+
+  <h3>账户与计费</h3>
+  <details>
+    <summary>为什么余额和 Token 数不能直接换算？</summary>
+    <div class="answer"><p>不同模型的输入、输出及缓存计费倍率不同，部分模型美元计价、部分人民币计价，账户统一折算为<strong>额度</strong>结算。想知道某次请求花了多少，去「使用日志」看明细最准确（含时间、模型、状态、延迟、费用）。</p></div>
+  </details>
+  <details>
+    <summary>额度消耗看起来比预期快？</summary>
+    <div class="answer"><p>长上下文、推理模型（输出中含思考过程）和高输出请求都会显著增加消耗。在「使用日志」中核对每次请求的 Token 明细即可定位原因。</p></div>
+  </details>
+
+  <h3>其他</h3>
+  <details>
+    <summary>浏览器打开 <code>:3000</code> 地址显示 forbidden？</summary>
+    <div class="answer"><p>正常现象。该端口只开放 <code>/v1/</code> 下的模型 API，供程序调用，不支持网页浏览。日常操作请访问官网主域名。</p></div>
+  </details>
+  <details>
+    <summary>遇到文档没覆盖的问题怎么办？</summary>
+    <div class="answer"><p>① 查看控制台「使用日志」中的错误详情；② 访问平台<strong>文档中心</strong>（docs.html）查阅「首次调用 API」等官方文档；③ 通过控制台左侧「在线客服」咨询。</p></div>
+  </details>
+
+  <h3>新手上手检查清单</h3>
+  <div class="flow" style="background:#ecfdf5;border-color:#a7f3d0">
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✓ 已注册登录</span><span class="arrow" style="color:#059669">→</span>
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✓ 已创建API密钥</span><span class="arrow" style="color:#059669">→</span>
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✓ 余额充足</span><span class="arrow" style="color:#059669">→</span>
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✓ 模型ID核对无误</span><span class="arrow" style="color:#059669">→</span>
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✓ /v1/models 测试通过</span><span class="arrow" style="color:#059669">→</span>
+    <span class="node" style="border-color:#a7f3d0;color:#065f46">✅ 首次对话调用成功</span>
+  </div>
+</section>
+
+<!-- ============ 视频教程 ============ -->
+<section class="doc" id="sec-video" style="padding:0;background:transparent;border:none">
+  <div class="video-section">
+    <h2><span class="num">▶</span>9 分钟完整实操视频</h2>
+    <p class="desc">看完全部文档后，再跟着这个 9 分钟视频把完整流程走一遍：注册登录 → 创建密钥 → 充值钱包 → 模型广场 → 在线体验 → curl/Python 调用，动手实操一遍就会了。所有画面都是近期真实操作录制。</p>
+    <div class="meta">
+      <span>⏱️ 时长 9 分 04 秒</span>
+      <span>📐 1920×910 高清</span>
+      <span>🎙️ 中文旁白 + 字幕</span>
+      <span>📁 15 个场景</span>
+    </div>
+    <div class="video-wrap">
+      <video controls preload="metadata" playsinline poster="睿枢AI平台使用教程_实操讲解_10分钟.png">
+        <source src="睿枢AI平台使用教程_实操讲解_10分钟.mp4" type="video/mp4">
+        <div class="video-fallback">
+          您的浏览器不支持 HTML5 视频播放。
+          <a href="睿枢AI平台使用教程_实操讲解_10分钟.mp4" download>👉 点此下载视频文件</a>
+        </div>
+      </video>
+    </div>
+    <div class="video-chapters">
+      <div class="ch">官网首页与平台简介</div>
+      <div class="ch">注册与登录流程</div>
+      <div class="ch">控制台概览与导航</div>
+      <div class="ch">API 密钥创建与管理</div>
+      <div class="ch">钱包充值与余额</div>
+      <div class="ch">模型广场与价格表</div>
+      <div class="ch">聚合平台在线体验</div>
+      <div class="ch">API 文档与代码示例</div>
+    </div>
+  </div>
+</section>
+</main>
+</div>
+
+<script>
+function copyCode(btn){
+  var pre = btn.parentElement.querySelector("pre");
+  var text = pre.innerText;
+  navigator.clipboard.writeText(text).then(function(){
+    btn.textContent = "已复制✓";
+    setTimeout(function(){ btn.textContent = "复制"; }, 1600);
+  });
+}
+// 侧边栏高亮当前章节
+var sections = document.querySelectorAll("section.doc");
+var navLinks = document.querySelectorAll(".sidebar a");
+window.addEventListener("scroll", function(){
+  var pos = window.scrollY + 100, current = null;
+  sections.forEach(function(s){ if(s.offsetTop <= pos) current = s.id; });
+  navLinks.forEach(function(a){
+    a.classList.toggle("active", a.getAttribute("href") === "#" + current);
+  });
+}, {passive:true});
+</script>
+</body>
+</html>
