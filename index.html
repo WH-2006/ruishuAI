@@ -104,6 +104,11 @@ tr:hover td{background:#fafbfe}
 .hero .meta span{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:4px 14px;border-radius:999px;font-size:12.5px;font-weight:600}
 @media(max-width:760px){.hero{padding:30px 22px}.hero h1{font-size:24px}}
 
+/* Hero 区视频提示条 */
+.hero-video-hint{display:inline-flex;align-items:center;gap:10px;margin-top:14px;padding:8px 16px;border-radius:999px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.28);color:#fff;font-size:13.5px;font-weight:600;backdrop-filter:blur(4px);transition:background .15s ease,transform .15s ease}
+.hero-video-hint:hover{background:rgba(255,255,255,.24);transform:translateY(-1px);text-decoration:none;color:#fff}
+.hero-video-hint .icon{font-size:14px}
+
 /* 视频教程 */
 .video-section{background:linear-gradient(180deg,#1e1b4b 0%,#312e81 50%,#4f46e5 100%);border-radius:16px;color:#fff;padding:32px 36px;margin-bottom:26px;position:relative;overflow:hidden}
 .video-section::before{content:"";position:absolute;right:-60px;top:-60px;width:240px;height:240px;border-radius:50%;background:rgba(255,255,255,.06);pointer-events:none}
@@ -187,6 +192,7 @@ details .answer p{margin:6px 0}
     <span>📚 30+ 模型</span>
     <span>🖥️ GPU 云实例 / 裸金属</span>
   </div>
+  <a class="hero-video-hint" href="#sec-video"><span class="icon">🎬</span>配套视频教程（见文档末尾）</a>
 </div>
 
 <!-- ============ 1 平台简介 ============ -->
